@@ -15,9 +15,9 @@ constexpr uint8_t sensor_right_Pin;
 OTAHandler otaHandler;
 
 //each sensor is a separate object, test interval and sampling values
-opticalSensor leftSensor(sensor_left_Pin);
-opticalSensor middleSensor(sensor_middle_Pin);
-opticalSensor rightSensor(sensor_right_Pin);
+OpticalSensor leftSensor(sensor_left_Pin);
+OpticalSensor middleSensor(sensor_middle_Pin);
+OpticalSensor rightSensor(sensor_right_Pin);
 
 
 
