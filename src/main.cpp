@@ -1,49 +1,54 @@
 #include <Arduino.h>
-// DO NOT USE delay(), OTA is NOT HAPPY WITH IT
-// keep constructors light, hardwere limts on startup
 
 #include "OTAHandler.h"
 #include "Sensors.h"
 
-//Pin numbers!!
-const int sensorPin1;
-const int sensorPin2;
+//Avoid blocking delays
+//Wi-Fi requiers frequent updates in loop()
+//Keep constructors light due to hardware limits on startup
+
+//Pin numbers
+constexpr uint8_t sensor_left_Pin;
+constexpr uint8_t sensor_middle_Pin;
+constexpr uint8_t sensor_right_Pin;
 
 OTAHandler otaHandler;
 
-//each sensor is a separate object
-//test interval and sampling values
-opticalSensor opticalSensor1(sensorPin1);
-opticalSensor opticalSensor2(sensorPin2);
+//each sensor is a separate object, test interval and sampling values
+opticalSensor leftSensor(sensor_left_Pin);
+opticalSensor middleSensor(sensor_middle_Pin);
+opticalSensor rightSensor(sensor_right_Pin);
 
-float distance1;
-float distance2;
+
 
 void setup() {
-
     Serial.begin(115200);
 
-    delay(50); //Give the cpu time to boot up before init of OTA and wifi. Exception to the rule above
+    delay(50); //Short startup delay for WiFi/CPU stabilization
     
+    //!!!! Add wifi LAN info before use!
     otaHandler.begin(
     "", //ssid
-    "",//password 
-    ""//hostname
+    "", //password 
+    ""  //hostname
     );
 
-    opticalSensor1.begin();
-    opticalSensor2.begin();
+    leftSensor.begin();
+    middleSensor.begin();
+    rightSensor.begin();
 }
 
 void loop() {
     otaHandler.update();
 
-    opticalSensor1.update();
-    opticalSensor2.update();
+    leftSensor.update();
+    middleSensor.update();
+    rightSensor.update();
 
-    distance1 = opticalSensor1.getDistanceCm();
-    distance2 = opticalSensor2.getDistanceCm();
+    const float leftDistance = leftSensor.getDistanceCm();
+    const float middleDistance = middleSensor.getDistanceCm();
+    const float rightDistance = rightSensor.getDistanceCm();
 
-    //add LED logic here
-
+    //TODO: Implement LED logic.
+    
 }
