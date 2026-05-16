@@ -1,49 +1,57 @@
 #include <Arduino.h>
-// DO NOT USE delay(), OTA is NOT HAPPY WITH IT
-// keep constructors light, hardwere limts on startup
 
 #include "OTAHandler.h"
 #include "Sensors.h"
 
-//Pin numbers!!
-const int sensorPin1;
-const int sensorPin2;
+// Avoid long blocking delays.
+// OTA requires frequent calls to otaHandler.update() from loop().
+// Keep global constructors lightweight; hardware initialization should happen in setup().
+
+//Pin numbers
+constexpr uint8_t SENSOR_PIN_LEFT = 0;
+constexpr uint8_t SENSOR_PIN_MIDDLE = 0;
+constexpr uint8_t SENSOR_PIN_RIGHT = 0;
 
 OTAHandler otaHandler;
 
-//each sensor is a separate object
-//test interval and sampling values
-opticalSensor opticalSensor1(sensorPin1);
-opticalSensor opticalSensor2(sensorPin2);
+//each sensor is a separate object, test interval and sampling values
+OpticalSensor leftSensor(SENSOR_PIN_LEFT);
+OpticalSensor middleSensor(SENSOR_PIN_MIDDLE);
+OpticalSensor rightSensor(SENSOR_PIN_RIGHT);
 
-float distance1;
-float distance2;
+
 
 void setup() {
-
     Serial.begin(115200);
 
-    delay(50); //Give the cpu time to boot up before init of OTA and wifi. Exception to the rule above
+    const u_int32_t TIMEOUTMS = 10000;
+
+    delay(50); //Short startup delay for WiFi/CPU stabilization
     
+    //TODO: Move WiFi credentials to a local config file
     otaHandler.begin(
     "", //ssid
-    "",//password 
-    ""//hostname
+    "", //password 
+    "",  //hostname
+    TIMEOUTMS
     );
 
-    opticalSensor1.begin();
-    opticalSensor2.begin();
+    leftSensor.begin();
+    middleSensor.begin();
+    rightSensor.begin();
 }
 
 void loop() {
     otaHandler.update();
 
-    opticalSensor1.update();
-    opticalSensor2.update();
+    leftSensor.update();
+    middleSensor.update();
+    rightSensor.update();
 
-    distance1 = opticalSensor1.getDistanceCm();
-    distance2 = opticalSensor2.getDistanceCm();
+    const float leftDistance = leftSensor.getDistanceCm();
+    const float middleDistance = middleSensor.getDistanceCm();
+    const float rightDistance = rightSensor.getDistanceCm();
 
-    //add LED logic here
-
+    //TODO: Implement LED logic.
+    
 }

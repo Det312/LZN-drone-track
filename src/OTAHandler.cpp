@@ -5,12 +5,13 @@
 
 void OTAHandler::begin(const char* ssid,
                        const char* password,
-                       const char* hostname) {
-
+                       const char* hostname,
+                       uint32_t timeoutMs){
+    
+    timeout = timeoutMs;
     
     connectToWiFi(ssid, password);
 
-    //check wifi connection
     if (!isConnected()) {
 
         Serial.println("[OTA] WiFi not connected");
@@ -47,9 +48,8 @@ void OTAHandler::connectToWiFi(const char* ssid,
 
     unsigned long startTime = millis();
 
-    // Timeout 10 seconds
     while (WiFi.status() != WL_CONNECTED &&
-           millis() - startTime < 10000) {
+           millis() - startTime < timeout) {
 
         Serial.print(".");
         delay(500);
