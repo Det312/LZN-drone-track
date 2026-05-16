@@ -24,13 +24,16 @@ OpticalSensor rightSensor(sensor_right_Pin);
 void setup() {
     Serial.begin(115200);
 
+    const u_int32_t TIMEOUTMS = 10000;
+
     delay(50); //Short startup delay for WiFi/CPU stabilization
     
     //TODO: Move WiFi credentials to a local config file
     otaHandler.begin(
     "", //ssid
     "", //password 
-    ""  //hostname
+    "",  //hostname
+    TIMEOUTMS
     );
 
     leftSensor.begin();

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Arduino.h>
+
 class OTAHandler {
 public:
 
@@ -7,7 +9,7 @@ public:
     void begin(const char* ssid,
                const char* password,
                const char* hostname,
-               const int timeoutMs);
+               uint32_t timeoutMs);
 
     // Must be called frequently from loop() to keep OTA responsive.
     // Blocking delays can cause issues with OTA service
@@ -17,7 +19,7 @@ public:
     bool isConnected();
 
 private: 
-    int timeout; //Wifi connection timeout period
+    uint32_t timeout; //Wifi connection timeout period in ms
 
     //Connect to a wifi network for ota service
     void connectToWiFi(const char* ssid,

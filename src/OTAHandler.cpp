@@ -6,7 +6,7 @@
 void OTAHandler::begin(const char* ssid,
                        const char* password,
                        const char* hostname,
-                       const int timeoutMs) {
+                       uint32_t timeoutMs){
     
     timeout = timeoutMs;
     
