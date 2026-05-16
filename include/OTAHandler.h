@@ -3,23 +3,24 @@
 class OTAHandler {
 public:
 
-    // Uruchomienie WiFi oraz OTA
+    //Initializes WiFi and starts OTA service
     void begin(const char* ssid,
                const char* password,
                const char* hostname);
 
-    // Obsługa OTA
+    //Handles the OTA service updates, needs to be called every loop().
+    //Blocking delays can cause issues with OTA service
     void update();
 
-    // Status połączenia
+    //Returns wifi connection status
     bool isConnected();
 
 private:
 
-    // Łączenie z WiFi
+    //Connect to a wifi network for ota service
     void connectToWiFi(const char* ssid,
                        const char* password);
 
-    // Rejestracja callbacków OTA
+    //Registers OTA event callbacks for serial logging and debug
     void setupCallbacks();
 };
