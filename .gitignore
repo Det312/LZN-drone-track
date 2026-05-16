@@ -4,4 +4,4 @@
 .vscode/launch.json
 .vscode/ipch
 .vscode
-.LocalConfig.h
+.include/LocalConfig.h
