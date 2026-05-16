@@ -3,9 +3,9 @@
 #include "OTAHandler.h"
 #include "Sensors.h"
 
-//Avoid blocking delays
-//Wi-Fi requiers frequent updates in loop()
-//Keep constructors light due to hardware limits on startup
+// Avoid long blocking delays.
+// OTA requires frequent calls to otaHandler.update() from loop().
+// Keep global constructors lightweight; hardware initialization should happen in setup().
 
 //Pin numbers
 constexpr uint8_t sensor_left_Pin;
@@ -26,7 +26,7 @@ void setup() {
 
     delay(50); //Short startup delay for WiFi/CPU stabilization
     
-    //!!!! Add wifi LAN info before use!
+    //TODO: Move WiFi credentials to a local config file
     otaHandler.begin(
     "", //ssid
     "", //password 
