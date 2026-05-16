@@ -4,8 +4,8 @@
 
 
 OpticalSensor::OpticalSensor(uint8_t analogPin,
-                             uint32_t readIntervalMs = 50,
-                             uint32_t sampling = 5)
+                             uint32_t readIntervalMs,
+                             uint32_t sampling)
 {
     m_analogPin = analogPin;
     m_readInterval = readIntervalMs;

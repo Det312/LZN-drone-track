@@ -8,16 +8,16 @@
 // Keep global constructors lightweight; hardware initialization should happen in setup().
 
 //Pin numbers
-constexpr uint8_t sensor_left_Pin;
-constexpr uint8_t sensor_middle_Pin;
-constexpr uint8_t sensor_right_Pin;
+constexpr uint8_t SENSOR_PIN_LEFT = 0;
+constexpr uint8_t SENSOR_PIN_MIDDLE = 0;
+constexpr uint8_t SENSOR_PIN_RIGHT = 0;
 
 OTAHandler otaHandler;
 
 //each sensor is a separate object, test interval and sampling values
-OpticalSensor leftSensor(sensor_left_Pin);
-OpticalSensor middleSensor(sensor_middle_Pin);
-OpticalSensor rightSensor(sensor_right_Pin);
+OpticalSensor leftSensor(SENSOR_PIN_LEFT);
+OpticalSensor middleSensor(SENSOR_PIN_MIDDLE);
+OpticalSensor rightSensor(SENSOR_PIN_RIGHT);
 
 
 

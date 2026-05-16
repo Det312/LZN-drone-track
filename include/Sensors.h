@@ -5,7 +5,6 @@
 // GP2Y0A21YK0F specific class, supports filtered reading to compensate for adc error.
 class OpticalSensor {
 public:
-
     OpticalSensor(uint8_t analogPin,
                   uint32_t readIntervalMs = 50,
                   uint32_t sampling = 5);

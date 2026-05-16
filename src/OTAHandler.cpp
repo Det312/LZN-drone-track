@@ -48,7 +48,6 @@ void OTAHandler::connectToWiFi(const char* ssid,
 
     unsigned long startTime = millis();
 
-    // Timeout 10 seconds
     while (WiFi.status() != WL_CONNECTED &&
            millis() - startTime < timeout) {
 
