@@ -31,4 +31,5 @@ Planned features:
 - race logic handled mostly on the python side
 
 ## System concept
-The final system is planned to consist of multiple independent gates.
+The final system is planned to consist of multiple independent gates. Flight order, time stamps and lap times will be programmable from a simple pc application. 
+
