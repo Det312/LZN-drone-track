@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+#include "Config.h"
 #include "OTAHandler.h"
 #include "Sensors.h"
 
@@ -7,17 +8,12 @@
 // OTA requires frequent calls to otaHandler.update() from loop().
 // Keep global constructors lightweight; hardware initialization should happen in setup().
 
-//Pin numbers
-constexpr uint8_t SENSOR_PIN_LEFT = 0;
-constexpr uint8_t SENSOR_PIN_MIDDLE = 0;
-constexpr uint8_t SENSOR_PIN_RIGHT = 0;
-
 OTAHandler otaHandler;
 
 //each sensor is a separate object, test interval and sampling values
-OpticalSensor leftSensor(SENSOR_PIN_LEFT);
-OpticalSensor middleSensor(SENSOR_PIN_MIDDLE);
-OpticalSensor rightSensor(SENSOR_PIN_RIGHT);
+OpticalSensor leftSensor(SENSOR_PIN_LEFT, SENSOR_READ_INTERVAL_MS, SENSOR_SAMPLING);
+OpticalSensor middleSensor(SENSOR_PIN_MIDDLE, SENSOR_READ_INTERVAL_MS, SENSOR_SAMPLING);
+OpticalSensor rightSensor(SENSOR_PIN_RIGHT, SENSOR_READ_INTERVAL_MS, SENSOR_SAMPLING);
 
 
 
@@ -30,10 +26,10 @@ void setup() {
     
     //TODO: Move WiFi credentials to a local config file
     otaHandler.begin(
-    "", //ssid
-    "", //password 
-    "",  //hostname
-    TIMEOUTMS
+    WIFI_SSID, //ssid
+    WIFI_PASSWORD, //password 
+    OTA_HOSTNAME,  //hostname
+    WIFI_TIMEOUT_MS
     );
 
     leftSensor.begin();
