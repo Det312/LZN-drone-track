@@ -20,11 +20,8 @@ OpticalSensor rightSensor(SENSOR_PIN_RIGHT, SENSOR_READ_INTERVAL_MS, SENSOR_SAMP
 void setup() {
     Serial.begin(115200);
 
-    const u_int32_t TIMEOUTMS = 10000;
-
     delay(50); //Short startup delay for WiFi/CPU stabilization
     
-    //TODO: Move WiFi credentials to a local config file
     otaHandler.begin(
     WIFI_SSID, //ssid
     WIFI_PASSWORD, //password 
