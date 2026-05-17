@@ -49,10 +49,21 @@ void loop() {
     middleSensor.update();
     rightSensor.update();
 
-    const float leftDistance = leftSensor.getDistanceCm();
-    const float middleDistance = middleSensor.getDistanceCm();
-    const float rightDistance = rightSensor.getDistanceCm();
+    float leftDistance = leftSensor.getDistanceCm();
+    float middleDistance = middleSensor.getDistanceCm();
+    float rightDistance = rightSensor.getDistanceCm();
 
-    //TODO: Implement LED logic.
+    if(leftDistance <= LEFT_TRGGER_DISTANCE || middleDistance <= MIDDLE_TRGGER_DISTANCE || rightDistance <= RIGHT_TRGGER_DISTANCE){
+        innerLed.setAll(255, 0, 0); //RED
+        outerLed.setAll(255, 0, 0); //RED
+    }
+    else{
+        innerLed.clear();
+        outerLed.clear();
+    }
+
+    innerLed.show();
+    outerLed.show();
+
     
 }
