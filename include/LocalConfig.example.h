@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 
-
+// Wifi
 constexpr const char* WIFI_SSID = "your-wifi-name";
 constexpr const char* WIFI_PASSWORD = "your-wifi-password";
 constexpr const char* OTA_HOSTNAME = "gate-01";
@@ -15,6 +15,12 @@ constexpr uint8_t SENSOR_PIN_LEFT = 34;
 constexpr uint8_t SENSOR_PIN_MIDDLE = 35;
 constexpr uint8_t SENSOR_PIN_RIGHT = 32;
 
+constexpr uint8_t LED_PIN_INNER = 20;
+constexpr uint8_t LED_PIN_OUTER = 21;
+
 // Sensor parameters
 constexpr uint32_t SENSOR_READ_INTERVAL_MS = 100;
 constexpr uint32_t SENSOR_SAMPLING = 10;
+
+// Led parameters
+constexpr uint32_t LED_COUNT = 213;
