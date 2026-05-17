@@ -3,6 +3,7 @@
 #include "Config.h"
 #include "OTAHandler.h"
 #include "Sensors.h"
+#include "LedHandler.h"
 
 // Avoid long blocking delays.
 // OTA requires frequent calls to otaHandler.update() from loop().
@@ -10,10 +11,14 @@
 
 OTAHandler otaHandler;
 
-//each sensor is a separate object, test interval and sampling values
+//each sensor is a separate object, test interval and sampling values in config
 OpticalSensor leftSensor(SENSOR_PIN_LEFT, SENSOR_READ_INTERVAL_MS, SENSOR_SAMPLING);
 OpticalSensor middleSensor(SENSOR_PIN_MIDDLE, SENSOR_READ_INTERVAL_MS, SENSOR_SAMPLING);
 OpticalSensor rightSensor(SENSOR_PIN_RIGHT, SENSOR_READ_INTERVAL_MS, SENSOR_SAMPLING);
+
+//every led strip is a seperate object, change LED_COUNT according to led strip length
+LedHandler innerLed(LED_PIN_INNER, LED_COUNT);
+LedHandler outerLed(LED_PIN_OUTER, LED_COUNT);
 
 
 
@@ -32,6 +37,9 @@ void setup() {
     leftSensor.begin();
     middleSensor.begin();
     rightSensor.begin();
+
+    innerLed.begin();
+    outerLed.begin();
 }
 
 void loop() {
