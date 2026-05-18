@@ -22,9 +22,9 @@ constexpr uint8_t LED_PIN_OUTER = 21;
 constexpr uint32_t SENSOR_READ_INTERVAL_MS = 100;
 constexpr uint32_t SENSOR_SAMPLING = 10;
 
-constexpr float LEFT_TRGGER_DISTANCE = 40;
-constexpr float MIDDLE_TRGGER_DISTANCE = 40;
-constexpr float RIGHT_TRGGER_DISTANCE = 40;
+constexpr float LEFT_TRIGGER_DISTANCE = 40;
+constexpr float MIDDLE_TRIGGER_DISTANCE = 40;
+constexpr float RIGHT_TRIGGER_DISTANCE = 40;
 
 // Led parameters
 constexpr uint32_t LED_COUNT = 213;
