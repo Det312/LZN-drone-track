@@ -53,17 +53,25 @@ void loop() {
     float middleDistance = middleSensor.getDistanceCm();
     float rightDistance = rightSensor.getDistanceCm();
 
-    if(leftDistance <= LEFT_TRIGGER_DISTANCE || middleDistance <= MIDDLE_TRIGGER_DISTANCE || rightDistance <= RIGHT_TRIGGER_DISTANCE){
-        innerLed.setAll(255, 0, 0); //RED
-        outerLed.setAll(255, 0, 0); //RED
-    }
-    else{
-        innerLed.clear();
-        outerLed.clear();
-    }
+    bool objectDetected = 
+        leftDistance <= LEFT_TRIGGER_DISTANCE ||
+        middleDistance <= MIDDLE_TRIGGER_DISTANCE ||
+        rightDistance <= RIGHT_TRIGGER_DISTANCE;
 
-    innerLed.show();
-    outerLed.show();
-
+    static bool lastObjectDetected = false;
     
+    if(objectDetected != lastObjectDetected){ //Avoid updating LEDs when nothing has changed
+        lastObjectDetected = objectDetected;
+
+        if(objectDetected){
+            innerLed.setAll(255, 0, 0);
+            outerLed.setAll(255, 0, 0); 
+        }
+        else{
+            innerLed.clear();
+            outerLed.clear();
+        }
+        innerLed.show();
+        innerLed.show();
+    }
 }
