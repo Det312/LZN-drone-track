@@ -10,6 +10,9 @@ OpticalSensor::OpticalSensor(uint8_t analogPin,
     m_analogPin = analogPin;
     m_readInterval = readIntervalMs;
     m_sampling = sampling;
+
+    m_lastReadTime = 0;
+    m_rawAnalog = 0;
 };
 
 void OpticalSensor::begin(){
@@ -45,11 +48,11 @@ u_int16_t OpticalSensor::filteredRead(){
 }
 
 uint16_t OpticalSensor::convertToDistanceCm(uint16_t adcReadout){
-    if(adcReadout < 1){    //prevent zero divison error
+    if(adcReadout <= 20){    //prevent zero divison error
             return 999.0f; //Error value TODO: change to NAN and add error handling
         }
     float distance =
     4800.0f / (adcReadout - 20); //approxmiation, check for accuracy
     
-    return distance;
+    return static_cast<uint16_t>(distance);
 }
