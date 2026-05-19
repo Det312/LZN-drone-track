@@ -59,9 +59,9 @@ void setup() {
     delay(50); //Short startup delay for WiFi/CPU stabilization
     
     otaHandler.begin(
-    WIFI_SSID, //ssid
-    WIFI_PASSWORD, //password 
-    OTA_HOSTNAME,  //hostname
+    WIFI_SSID,
+    WIFI_PASSWORD, 
+    OTA_HOSTNAME, 
     WIFI_TIMEOUT_MS
     );
 
@@ -90,7 +90,7 @@ void loop() {
     float middleDistance = middleSensor.getDistanceCm();
     float rightDistance = rightSensor.getDistanceCm();
 
-    telnet_debug();
+    telnet_debug(leftDistance, middleDistance, rightDistance);
 
     bool objectDetected = 
         leftDistance <= LEFT_TRIGGER_DISTANCE ||

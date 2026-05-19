@@ -47,12 +47,13 @@ u_int16_t OpticalSensor::filteredRead(){
         return sum / m_sampling;
 }
 
-uint16_t OpticalSensor::convertToDistanceCm(uint16_t adcReadout){
-    if(adcReadout <= 20){    //prevent zero divison error
-            return 999.0f; //Error value TODO: change to NAN and add error handling
-        }
-    float distance =
-    4800.0f / (adcReadout - 20); //approxmiation, check for accuracy
+float OpticalSensor::convertToDistanceCm(uint16_t adcReadout){
+    float voltage = filteredRead() * (3.3 / 4095);
+
+    if (voltage < 0.1)
+        voltage = 0.2;
     
-    return static_cast<uint16_t>(distance);
+    float distance = 27.89 / (voltage - 0.1);
+    
+    return (distance);
 }

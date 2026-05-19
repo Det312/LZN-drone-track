@@ -34,6 +34,6 @@ private:
     uint16_t filteredRead();
 
     //Converts the adc readout to distance in cm. Highly recommended to not use raw adc values due to errors.
-    uint16_t convertToDistanceCm(uint16_t adcReadout);
+    float convertToDistanceCm(uint16_t adcReadout);
     
 };
