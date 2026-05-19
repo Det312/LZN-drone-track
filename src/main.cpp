@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <WiFi.h>
 
 #include "Config.h"
 #include "OTAHandler.h"
@@ -20,6 +21,36 @@ OpticalSensor rightSensor(SENSOR_PIN_RIGHT, SENSOR_READ_INTERVAL_MS, SENSOR_SAMP
 LedHandler innerLed(LED_PIN_INNER, LED_COUNT);
 LedHandler outerLed(LED_PIN_OUTER, LED_COUNT);
 
+WiFiServer telnetServer(23);
+WiFiClient telnetClient;
+
+void telnet_debug(float left, float middle, float right){ //TODO: Move to wifi manager
+    if(telnetServer.hasClient()){
+        if(telnetClient && telnetClient.connected()){
+            telnetServer.available().stop();
+        }
+        else{
+            telnetClient = telnetServer.available();
+        }
+    }
+
+    static unsigned long lastTelnetPrint = 0;
+
+    if( telnetClient && telnetClient.connected()){
+        if(millis() - lastTelnetPrint >= 250){
+            lastTelnetPrint = millis();
+
+            telnetClient.print("L: ");
+            telnetClient.print(left);
+            telnetClient.print("  M: ");
+            telnetClient.print(middle);
+            telnetClient.print("  R: ");
+            telnetClient.println(right);
+
+        }
+    }
+}
+
 
 
 void setup() {
@@ -34,12 +65,18 @@ void setup() {
     WIFI_TIMEOUT_MS
     );
 
+    telnetServer.begin();
+    telnetServer.setNoDelay(true);
+
     leftSensor.begin();
     middleSensor.begin();
     rightSensor.begin();
 
     innerLed.begin();
     outerLed.begin();
+
+    analogReadResolution(12);
+    analogSetAttenuation(ADC_11db);
 }
 
 void loop() {
@@ -52,6 +89,8 @@ void loop() {
     float leftDistance = leftSensor.getDistanceCm();
     float middleDistance = middleSensor.getDistanceCm();
     float rightDistance = rightSensor.getDistanceCm();
+
+    telnet_debug();
 
     bool objectDetected = 
         leftDistance <= LEFT_TRIGGER_DISTANCE ||
