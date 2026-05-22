@@ -92,34 +92,65 @@ void setup() {
     innerLed.begin();
     outerLed.begin();
 
+    innerLed.clear();
+    outerLed.clear();
+
+    innerLed.show();
+    outerLed.show();
+
+    randomSeed(esp_random());
+
+    currentIdleAnimation = randomIdleAnimation();
+
+    currentDetectedAnimation = randomDetectedAnimation();
+
     analogReadResolution(12);
     analogSetAttenuation(ADC_11db);
 }
 
-void loop(){
+void loop() {
     otaHandler.update();
 
     leftSensor.update();
     middleSensor.update();
     rightSensor.update();
 
-    float leftDistance = leftSensor.getDistanceCm();
-    float middleDistance = middleSensor.getDistanceCm();
-    float rightDistance = rightSensor.getDistanceCm();
-
-    telnet_debug(leftDistance, middleDistance, rightDistance);
+    uint16_t leftDistance = leftSensor.getDistanceCm();
+    uint16_t middleDistance = middleSensor.getDistanceCm();
+    uint16_t rightDistance = rightSensor.getDistanceCm();
 
     bool objectDetected = 
-        leftDistance <= LEFT_TRIGGER_DISTANCE ||
-        middleDistance <= MIDDLE_TRIGGER_DISTANCE ||
-        rightDistance <= RIGHT_TRIGGER_DISTANCE;
+            leftDistance <= LEFT_TRIGGER_DISTANCE ||
+            middleDistance <= MIDDLE_TRIGGER_DISTANCE ||
+            rightDistance <= RIGHT_TRIGGER_DISTANCE;
 
-    if(objectDetected){
-        innerLed.detectedAnimation();
-        outerLed.detectedAnimation();
+    static bool detectedModeActive = false;
+
+    static uint32_t detectedModeStartTime = 0;
+
+    // Start detected mode
+    if (objectDetected && !detectedModeActive) {
+        detectedModeActive = true;
+        detectedModeStartTime = millis();
+        currentDetectedAnimation = randomDetectedAnimation();
     }
+
+
+    if (detectedModeActive) {
+        innerLed.detectedAnimation(currentDetectedAnimation);
+
+        outerLed.detectedAnimation(currentDetectedAnimation);
+
+        // End detected mode
+        if (millis() - detectedModeStartTime >= 3000){
+            detectedModeActive = false;
+            currentIdleAnimation = randomIdleAnimation();
+        }
+    } 
+    
     else{
-        innerLed.idleAnimation(LedHandler::IDLE_SOFT_SCAN);
-        outerLed.idleAnimation(LedHandler::IDLE_SOFT_SCAN);
+        innerLed.idleAnimation(currentIdleAnimation);
+
+        outerLed.idleAnimation(currentIdleAnimation);
     }
 }
