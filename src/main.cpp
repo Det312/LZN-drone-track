@@ -79,7 +79,7 @@ void setup() {
     analogSetAttenuation(ADC_11db);
 }
 
-void loop() {
+void loop(){
     otaHandler.update();
 
     leftSensor.update();
@@ -97,20 +97,12 @@ void loop() {
         middleDistance <= MIDDLE_TRIGGER_DISTANCE ||
         rightDistance <= RIGHT_TRIGGER_DISTANCE;
 
-    static bool lastObjectDetected = false;
-    
-    if(objectDetected != lastObjectDetected){ //Avoid updating LEDs when nothing has changed
-        lastObjectDetected = objectDetected;
-
-        if(objectDetected){
-            innerLed.setAll(255, 0, 0);
-            outerLed.setAll(255, 0, 0); 
-        }
-        else{
-            innerLed.clear();
-            outerLed.clear();
-        }
-        innerLed.show();
-        outerLed.show();
+    if(objectDetected){
+        innerLed.detectedAnimation();
+        outerLed.detectedAnimation();
+    }
+    else{
+        innerLed.idleAnimation(LedHandler::IDLE_SOFT_SCAN);
+        outerLed.idleAnimation(LedHandler::IDLE_SOFT_SCAN);
     }
 }
