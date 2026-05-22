@@ -5,6 +5,22 @@
 
 class LedHandler{
 public:
+
+    enum IdleAnimationMode {
+        IDLE_BREATH = 0,
+        IDLE_SOFT_SCAN = 1,
+        IDLE_SPARKLE = 2,
+        IDLE_RAINBOW = 3
+    };
+
+    enum DetectedAnimationMode {
+        DETECTED_RED_PULSE = 0,
+        DETECTED_FIRE_WAVE = 1,
+        DETECTED_STROBE = 2,
+        DETECTED_POLICE = 3
+    };
+
+
     LedHandler(uint8_t dataPin, uint16_t ledCount);
 
     //Initialize led string
@@ -17,13 +33,28 @@ public:
     //Mainly for debug and testing
     //TODO:Implement better LED control, move this func to private 
     void setAll(uint8_t red, uint8_t green, uint8_t blue);
+
+    void setPixel(uint16_t index, uint8_t red, uint8_t green, uint8_t blue);
     
     //Update leds
     void show();
 
     //Clear led strip
     void clear();
+
+    void idleAnimation(IdleAnimationMode mode);
+    void detectedAnimation(DetectedAnimationMode mode);
     
 private:
     Adafruit_NeoPixel m_strip;
+
+    uint32_t m_lastAnimUpdate;
+    uint16_t m_animStep;
+    bool m_animDirection;
+
+    uint8_t m_targetRed = 0;
+    uint8_t m_targetGreen = 0;
+    uint8_t m_targetBlue = 255;
+
+    uint32_t makeColor(uint8_t red, uint8_t green, uint8_t blue);
 };

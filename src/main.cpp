@@ -24,6 +24,23 @@ LedHandler outerLed(LED_PIN_OUTER, LED_COUNT);
 WiFiServer telnetServer(23);
 WiFiClient telnetClient;
 
+LedHandler::IdleAnimationMode currentIdleAnimation;
+LedHandler::DetectedAnimationMode currentDetectedAnimation;
+
+LedHandler::IdleAnimationMode randomIdleAnimation() {
+    return static_cast<
+        LedHandler::IdleAnimationMode>(
+            random(0, 4)
+    );
+}
+
+LedHandler::DetectedAnimationMode randomDetectedAnimation() {
+    return static_cast<
+        LedHandler::DetectedAnimationMode>(
+            random(0, 4)
+    );
+}
+
 void telnet_debug(float left, float middle, float right){ //TODO: Move to wifi manager
     if(telnetServer.hasClient()){
         if(telnetClient && telnetClient.connected()){
@@ -51,8 +68,6 @@ void telnet_debug(float left, float middle, float right){ //TODO: Move to wifi m
     }
 }
 
-
-
 void setup() {
     Serial.begin(115200);
 
@@ -75,6 +90,18 @@ void setup() {
     innerLed.begin();
     outerLed.begin();
 
+    innerLed.clear();
+    outerLed.clear();
+
+    innerLed.show();
+    outerLed.show();
+
+    randomSeed(esp_random());
+
+    currentIdleAnimation = randomIdleAnimation();
+
+    currentDetectedAnimation = randomDetectedAnimation();
+
     analogReadResolution(12);
     analogSetAttenuation(ADC_11db);
 }
@@ -86,31 +113,42 @@ void loop() {
     middleSensor.update();
     rightSensor.update();
 
-    float leftDistance = leftSensor.getDistanceCm();
-    float middleDistance = middleSensor.getDistanceCm();
-    float rightDistance = rightSensor.getDistanceCm();
-
-    telnet_debug(leftDistance, middleDistance, rightDistance);
+    uint16_t leftDistance = leftSensor.getDistanceCm();
+    uint16_t middleDistance = middleSensor.getDistanceCm();
+    uint16_t rightDistance = rightSensor.getDistanceCm();
 
     bool objectDetected = 
-        leftDistance <= LEFT_TRIGGER_DISTANCE ||
-        middleDistance <= MIDDLE_TRIGGER_DISTANCE ||
-        rightDistance <= RIGHT_TRIGGER_DISTANCE;
+            leftDistance <= LEFT_TRIGGER_DISTANCE ||
+            middleDistance <= MIDDLE_TRIGGER_DISTANCE ||
+            rightDistance <= RIGHT_TRIGGER_DISTANCE;
 
-    static bool lastObjectDetected = false;
-    
-    if(objectDetected != lastObjectDetected){ //Avoid updating LEDs when nothing has changed
-        lastObjectDetected = objectDetected;
+    static bool detectedModeActive = false;
 
-        if(objectDetected){
-            innerLed.setAll(255, 0, 0);
-            outerLed.setAll(255, 0, 0); 
+    static uint32_t detectedModeStartTime = 0;
+
+    // Start detected mode
+    if (objectDetected && !detectedModeActive) {
+        detectedModeActive = true;
+        detectedModeStartTime = millis();
+        currentDetectedAnimation = randomDetectedAnimation();
+    }
+
+
+    if (detectedModeActive) {
+        innerLed.detectedAnimation(currentDetectedAnimation);
+
+        outerLed.detectedAnimation(currentDetectedAnimation);
+
+        // End detected mode
+        if (millis() - detectedModeStartTime >= 3000){
+            detectedModeActive = false;
+            currentIdleAnimation = randomIdleAnimation();
         }
-        else{
-            innerLed.clear();
-            outerLed.clear();
-        }
-        innerLed.show();
-        outerLed.show();
+    } 
+
+    else{
+        innerLed.idleAnimation(currentIdleAnimation);
+
+        outerLed.idleAnimation(currentIdleAnimation);
     }
 }
