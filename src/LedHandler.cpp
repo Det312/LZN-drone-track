@@ -46,7 +46,6 @@ uint32_t LedHandler::makeColor(uint8_t red, uint8_t green, uint8_t blue) {
     return m_strip.Color(red, green, blue);
 }
 
-
 void LedHandler::idleAnimation(IdleAnimationMode mode) {
     uint32_t now = millis();
 

@@ -24,6 +24,23 @@ LedHandler outerLed(LED_PIN_OUTER, LED_COUNT);
 WiFiServer telnetServer(23);
 WiFiClient telnetClient;
 
+LedHandler::IdleAnimationMode currentIdleAnimation;
+LedHandler::DetectedAnimationMode currentDetectedAnimation;
+
+LedHandler::IdleAnimationMode randomIdleAnimation() {
+    return static_cast<
+        LedHandler::IdleAnimationMode>(
+            random(0, 4)
+    );
+}
+
+LedHandler::DetectedAnimationMode randomDetectedAnimation() {
+    return static_cast<
+        LedHandler::DetectedAnimationMode>(
+            random(0, 4)
+    );
+}
+
 void telnet_debug(float left, float middle, float right){ //TODO: Move to wifi manager
     if(telnetServer.hasClient()){
         if(telnetClient && telnetClient.connected()){
