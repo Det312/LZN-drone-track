@@ -68,8 +68,6 @@ void telnet_debug(float left, float middle, float right){ //TODO: Move to wifi m
     }
 }
 
-
-
 void setup() {
     Serial.begin(115200);
 
@@ -147,7 +145,7 @@ void loop() {
             currentIdleAnimation = randomIdleAnimation();
         }
     } 
-    
+
     else{
         innerLed.idleAnimation(currentIdleAnimation);
 
