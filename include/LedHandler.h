@@ -9,8 +9,17 @@ public:
     enum IdleAnimationMode {
         IDLE_BREATH = 0,
         IDLE_SOFT_SCAN = 1,
-        IDLE_SPARKLE = 2
+        IDLE_SPARKLE = 2,
+        IDLE_RAINBOW = 3
     };
+
+    enum DetectedAnimationMode {
+        DETECTED_RED_PULSE = 0,
+        DETECTED_FIRE_WAVE = 1,
+        DETECTED_STROBE = 2,
+        DETECTED_POLICE = 3
+    };
+
 
     LedHandler(uint8_t dataPin, uint16_t ledCount);
 
@@ -34,12 +43,12 @@ public:
     void clear();
 
     void idleAnimation(IdleAnimationMode mode);
-    void detectedAnimation();
+    void detectedAnimation(DetectedAnimationMode mode);
     
 private:
     Adafruit_NeoPixel m_strip;
 
-    uint32_t m_lastAnimUpdated;
+    uint32_t m_lastAnimUpdate;
     uint16_t m_animStep;
     bool m_animDirection;
 
