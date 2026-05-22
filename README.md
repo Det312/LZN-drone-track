@@ -1,4 +1,4 @@
-# LZN Drone Thing
+# Interactive FPV drone track
 
 Firmware for an ESP32-based FPV drone gate/checkpoint system.
 
@@ -12,17 +12,11 @@ Most of the race logic, timing, ordering and state management is planned to be h
 ## Project status
 
 This project is currently under development.
+As in its current state the main funcionality of controlling the LEDs based on detecting and object passing throug the gate it is complete. 
+Each gate can operate on its own, the animations and detection range can be confiugured by user. There is no way to control the whole course consting of multiple gates.
 
-Current focus:
-- ESP32 firmware structure
-- WiFi connection
-- OTA updates
-- local configuration files
-- optical sensor handling
-- LED strip control
 
 Planned features:
-- Switch to esp32 c3 seeed for smaller hardware
 - communication with a Python controller
 - multiple gates in one WiFi network
 - gate state synchronization
