@@ -16,7 +16,7 @@ public:
     BrokerCommandMessage readCommand();
 
 private:
-    static GateComms* s_instance;
+    static BrokerCom* s_instance;
 
     uint8_t m_brokerMac[6];
     uint8_t m_gateId = 0;
