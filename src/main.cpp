@@ -6,7 +6,7 @@
 #include "Sensors.h"
 #include "LedHandler.h"
 #include "EspNowHandler.h"
-#include "Protocol.h"
+#include "ComProtocol.h"
 
 // Avoid long blocking delays.
 // OTA requires frequent calls to otaHandler.update() from loop().
