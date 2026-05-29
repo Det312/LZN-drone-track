@@ -60,3 +60,12 @@ BrokerCommandMessage BrokerCom::readCommand(){
     m_hasCommand = false;
     return m_lastCommand;
 }
+
+void BrokerCom::onDataReceived(const uint8_t* mac,
+                               const uint8_t* data,
+                               int len){
+    if(s_instance == nullptr){
+        return;
+    }
+    s_instance->handleReceivedData(data, len);
+}
