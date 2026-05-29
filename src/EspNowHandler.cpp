@@ -33,3 +33,20 @@ bool BrokerCom::begin(const uint8_t brokerMac[6], uint8_t gateId){
     Serial.println("[ESP-NOW] Gate communication ready");
     return true;
 }
+
+bool BrokerCom::sendTrigger(){
+    GateTriggerMessage message = {};
+
+    message.version = PROTOCOL_VERSION;
+    message.type = MSG_TRIGGER;
+    message.gateId = m_gateId;
+    message.eventCounter = ++m_eventCounter;
+
+    esp_err_t result = esp_now_send(
+        m_brokerMac,
+        reinterpret_cast<uint8_t*>(&message),
+        sizeof(message)
+    );
+
+    return result == ESP_OK;
+}
