@@ -35,6 +35,7 @@ bool BrokerCom::begin(const uint8_t brokerMac[6], uint8_t gateId){
 }
 
 bool BrokerCom::sendTrigger(){
+    
     GateTriggerMessage message = {};
 
     message.version = PROTOCOL_VERSION;
@@ -49,4 +50,13 @@ bool BrokerCom::sendTrigger(){
     );
 
     return result == ESP_OK;
+}
+
+bool BrokerCom::hasCommand() const {
+    return m_hasCommand;
+}
+
+BrokerCommandMessage BrokerCom::readCommand(){
+    m_hasCommand = false;
+    return m_lastCommand;
 }
