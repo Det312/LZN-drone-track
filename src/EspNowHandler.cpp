@@ -34,12 +34,11 @@ bool BrokerCom::begin(const uint8_t brokerMac[6], uint8_t gateId){
     return true;
 }
 
-bool BrokerCom::sendTrigger(){
-    
+bool GateComms::sendTrigger() {
     GateTriggerMessage message = {};
 
     message.version = PROTOCOL_VERSION;
-    message.type = MSG_TRIGGER;
+    message.type = MessageType::Trigger;
     message.gateId = m_gateId;
     message.eventCounter = ++m_eventCounter;
 
@@ -68,4 +67,41 @@ void BrokerCom::onDataReceived(const uint8_t* mac,
         return;
     }
     s_instance->handleReceivedData(data, len);
+}
+
+void GateComms::handleReceivedData(const uint8_t* data, int len) {
+    if (len < 2) {
+        return;
+    }
+
+    uint8_t version = data[0];
+
+    MessageType type =
+        static_cast<MessageType>(data[1]);
+
+    if (version != PROTOCOL_VERSION) {
+        return;
+    }
+
+    if (type != MessageType::Command) {
+        return;
+    }
+
+    if (len != sizeof(BrokerCommandMessage)) {
+        return;
+    }
+
+    BrokerCommandMessage command = {};
+    memcpy(&command, data, sizeof(command));
+
+    bool isForThisGate =
+        command.targetGateId == m_gateId ||
+        command.targetGateId == BROADCAST_GATE_ID;
+
+    if (!isForThisGate) {
+        return;
+    }
+
+    m_lastCommand = command;
+    m_hasCommand = true;
 }
