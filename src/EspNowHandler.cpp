@@ -3,7 +3,7 @@
 BrokerCom* BrokerCom::s_instance = nullptr;
 
 bool BrokerCom::begin(const uint8_t brokerMac[6], uint8_t gateId){
-    m_gateId = gateId
+    m_gateId = gateId;
 
     memcpy(m_brokerMac, brokerMac, 6);
 
@@ -11,13 +11,13 @@ bool BrokerCom::begin(const uint8_t brokerMac[6], uint8_t gateId){
 
     //Wifi must be in STA mode
     //Call OTAHandler before
-    if(eps_now_init() != ESP_OK){
+    if(esp_now_init() != ESP_OK){
         return false;
     }
 
     esp_now_register_recv_cb(BrokerCom::onDataReceived);
 
-    esp_now_peer_info = {};
+    esp_now_peer_info_t peerInfo= {};
     memcpy(peerInfo.peer_addr, m_brokerMac, 6);
 
     //important for OTA and ESPNOW 
@@ -34,7 +34,7 @@ bool BrokerCom::begin(const uint8_t brokerMac[6], uint8_t gateId){
     return true;
 }
 
-bool GateComms::sendTrigger() {
+bool BrokerCom::sendTrigger() {
     GateTriggerMessage message = {};
 
     message.version = PROTOCOL_VERSION;
@@ -69,7 +69,7 @@ void BrokerCom::onDataReceived(const uint8_t* mac,
     s_instance->handleReceivedData(data, len);
 }
 
-void GateComms::handleReceivedData(const uint8_t* data, int len) {
+void BrokerCom::handleReceivedData(const uint8_t* data, int len) {
     if (len < 2) {
         return;
     }
