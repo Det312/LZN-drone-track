@@ -48,8 +48,6 @@ LedHandler outerLed(
 
 BrokerCom brokerCom;
 
-// TODO: Move to local config.
-constexpr uint8_t GATE_ID = 1;
 
 const uint8_t BROKER_MAC[6] = {
     0x24, 0x6F, 0x28,

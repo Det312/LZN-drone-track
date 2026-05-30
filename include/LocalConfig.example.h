@@ -28,3 +28,6 @@ constexpr float RIGHT_TRIGGER_DISTANCE = 40;
 
 // Led parameters
 constexpr uint32_t LED_COUNT = 213;
+
+//Communication parameters
+constexpr uint8_t GATE_ID = 1;
