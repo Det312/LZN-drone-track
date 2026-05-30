@@ -31,3 +31,7 @@ constexpr uint32_t LED_COUNT = 213;
 
 //Communication parameters
 constexpr uint8_t GATE_ID = 1;
+const uint8_t BROKER_MAC[6] = {
+    0x24, 0x6F, 0x28,
+    0xAA, 0xBB, 0xCC
+};

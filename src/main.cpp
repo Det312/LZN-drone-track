@@ -49,11 +49,6 @@ LedHandler outerLed(
 BrokerCom brokerCom;
 
 
-const uint8_t BROKER_MAC[6] = {
-    0x24, 0x6F, 0x28,
-    0xAA, 0xBB, 0xCC
-};
-
 enum class LedControlState : uint8_t {
     IdlePreset,
     DetectedPreset,
