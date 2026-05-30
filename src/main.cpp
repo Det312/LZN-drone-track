@@ -247,33 +247,6 @@ void updateRemoteLedState() {
     }
 }
 
-// TODO: Delete telnet debug when ESP-NOW communication is stable.
-void telnet_debug(float left, float middle, float right) {
-    if (telnetServer.hasClient()) {
-        if (telnetClient && telnetClient.connected()) {
-            telnetServer.available().stop();
-        } else {
-            telnetClient = telnetServer.available();
-        }
-    }
-
-    static unsigned long lastTelnetPrint = 0;
-
-    if (telnetClient && telnetClient.connected()) {
-        if (millis() - lastTelnetPrint >= 250) {
-            lastTelnetPrint = millis();
-
-            telnetClient.print("L: ");
-            telnetClient.print(left);
-
-            telnetClient.print("  M: ");
-            telnetClient.print(middle);
-
-            telnetClient.print("  R: ");
-            telnetClient.println(right);
-        }
-    }
-}
 
 void setup() {
     Serial.begin(115200);
@@ -292,9 +265,6 @@ void setup() {
         GATE_ID
     );
 
-    telnetServer.begin();
-    telnetServer.setNoDelay(true);
-
     leftSensor.begin();
     middleSensor.begin();
     rightSensor.begin();
@@ -310,11 +280,9 @@ void setup() {
 
     randomSeed(esp_random());
 
-    currentIdleAnimation =
-        randomIdleAnimation();
+    currentIdleAnimation = randomIdleAnimation();
 
-    currentDetectedAnimation =
-        randomDetectedAnimation();
+    currentDetectedAnimation = randomDetectedAnimation();
 
     analogReadResolution(12);
     analogSetAttenuation(ADC_11db);
@@ -336,11 +304,6 @@ void loop() {
     uint16_t rightDistance =
         rightSensor.getDistanceCm();
 
-    telnet_debug(
-        leftDistance,
-        middleDistance,
-        rightDistance
-    );
 
     bool objectDetected =
         leftDistance <= LEFT_TRIGGER_DISTANCE ||
